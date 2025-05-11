@@ -39,10 +39,10 @@ export default function Home() {
 
             <List>
               {popularPosts.map(({ id, title, date }) => (
-                <SLink href={`/post/${id}`}>
-                  <ListRow key={id}>
-                  <span>{title}</span>
-                  <span>{date}</span>
+                <SLink href={`/post/${id}`} key={id}>
+                  <ListRow>
+                    <span>{title}</span>
+                    <span>{date}</span>
                   </ListRow>
                 </SLink>
               ))}
