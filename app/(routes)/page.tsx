@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
+import Layout from '../_components/layout';
 
 const popularPosts = [
   { id:1, title: '오늘 점심 뭐 먹지..', date: '25.04.28' },
@@ -14,15 +15,9 @@ const popularPosts = [
 
 export default function Home() {
   return (
-    <>
-      <TopBar>
-        <Logo>MaskBook</Logo>
-        <SignIn>Sign In</SignIn>
-      </TopBar>
-
-      <Main>
-        {/* ------- 좌측 영역 ------- */}
-        <LeftPanel>
+    <Layout>
+          {/* ------- 좌측 영역 ------- */}
+          <LeftPanel>
           <SearchBox placeholder="Search…" />
 
           <PopularArea>
@@ -59,67 +54,27 @@ export default function Home() {
           fill
         />
         </RightPanel>
-      </Main>
-    </>
+
+    </Layout>
   );
 }
 
 /* ---------------- styled-components ---------------- */
 
-
-const TopBar = styled.header`
-  position: fixed;
-  top:0;
-  left:0;
-  width: 100%;
-  padding: 1.5rem 2rem;
-  background: #d79c17; /* 헤더 배경색 */
+const MainBody = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  box-sizing: border-box; /* ← 패딩‧보더를 폭 안에 포함 */
-  z-index:1000;
-`;
-
-const Logo = styled.h1`
-  font-family: 'Times New Roman', serif;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #fff;
-  margin: 0;
-`;
-
-const SignIn = styled.button`
-  padding: 0.5rem 1.5rem;
-  background: #efd9ad;
-  border: 1px solid #cba86d;
-  border-radius: 3px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-  color:rgba(0,0,0,0.7);
-
-  &:hover {
-    background: #f5e5c5;
-  }
-`;
-
-const Main = styled.main`
-  display: grid;
-  grid-template-columns: 7fr minmax(350px, 3fr);
+  justify-content:center;
   gap: 3rem;
-  max-width: 1000px;
   margin: 3rem auto;
-  margin-top: 120px;
-  padding: 0 2rem;
 `;
 
 /* ---------- 좌측 ---------- */
 
 const LeftPanel = styled.section`
+  width:100%;
   display: flex;
   flex-direction: column;
+  margin-right:2rem;
 `;
 
 const SearchBox = styled.input`
@@ -128,7 +83,6 @@ const SearchBox = styled.input`
   border-radius: 999px;
   padding: 0 1.2rem;
   font-size: 1rem;
-
   &::placeholder {
     color: #666;
   }
@@ -175,6 +129,7 @@ const RightPanel = styled.aside`
   border: 1px solid rgba(0, 0, 0, 0.2);  /* 얕은 검은색 경계선 */
   border-radius: 4px;                     /* 라운드 모서리 */
   cursor: pointer;
+  width:370px;
 `;
 
 const SLink = styled(Link)`
