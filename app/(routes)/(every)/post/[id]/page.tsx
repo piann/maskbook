@@ -63,7 +63,7 @@ const CategoryRow = styled.div`
   align-items: center;
   gap: 0.5rem;
   font-weight: 500;
-  margin-bottom:1rem;
+  margin-bottom:1.5rem;
 `;
 
 const Icon = styled.span`
