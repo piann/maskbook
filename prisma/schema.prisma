@@ -17,7 +17,7 @@ datasource db {
 
 
 model Post {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   title String @default("")
   content String @db.Text @default("")
   likedCount Int @default(0)
