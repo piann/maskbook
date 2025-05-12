@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Layout from '../_components/layout';
+import useSWR from 'swr';
 
 const popularPosts = [
   { id:1, title: '오늘 점심 뭐 먹지..', date: '25.04.28' },
@@ -14,6 +15,10 @@ const popularPosts = [
 ];
 
 export default function Home() {
+
+  const { data, error, isLoading } = useSWR('/api/post')
+
+  console.log(data);
   return (
     <Layout>
           {/* ------- 좌측 영역 ------- */}

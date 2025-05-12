@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import StyledComponentsRegistry from '@/lib/registry';
+import { SWRConfig } from 'swr';
+import SwrProvider from "./_providers/swr-providers";
 
 export const metadata: Metadata = {
   title: "Maskbook",
@@ -13,10 +15,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body cz-shortcut-listen="true">
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </body>
-    </html>
+      <html lang="en">
+        <body cz-shortcut-listen="true">
+          <StyledComponentsRegistry>
+            <SwrProvider>
+              {children}
+            </SwrProvider>
+          </StyledComponentsRegistry>
+        </body>
+      </html>
   );
 }
