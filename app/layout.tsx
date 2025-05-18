@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import StyledComponentsRegistry from '@/lib/registry';
-import { SWRConfig } from 'swr';
 import SwrProvider from "./_providers/swr-providers";
 
 export const metadata: Metadata = {

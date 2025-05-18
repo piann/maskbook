@@ -1,7 +1,5 @@
 import crypto from "crypto";
 
-
-
 export const formatDate = (raw?: Date) => {
     if (!raw) return '';
     const d = new Date(raw);
