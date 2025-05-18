@@ -1,7 +1,9 @@
 'use client';
 
 import Layout from '@/app/_components/layout';
+import useMutation from '@/lib/client/use-mutation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -11,7 +13,12 @@ interface SignUpForm {
   confirmPassword: string;
 }
 
+interface SignUpPostResponse{
+    ok:boolean;
+}
+
 export default function SignUp() {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -20,11 +27,14 @@ export default function SignUp() {
       } = useForm<SignUpForm>();
     
   const onValid = (data: SignUpForm) => {
-    console.log('회원가입 정보:', data);
+    postSignUp({email:data.email, password:data.password});
+    router.push("/")
   };
 
-
   const passwordValue = watch('password');
+
+  // POST
+  const [postSignUp, { loading, data, error }] = useMutation<SignUpPostResponse>("/api/user/");
 
   return (
     <Layout>
@@ -33,7 +43,15 @@ export default function SignUp() {
           <Title>New Account</Title>
 
           <Label>이메일 주소</Label>
-          <Input {...register('email', { required: true })} type="email" placeholder="example@email.com" />
+          <Input {...register('email', {
+             required: true,
+             pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: '올바른 이메일 형식이 아닙니다.', 
+                }, 
+                }
+             )} type="email" placeholder="example@email.com" />
+            {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
 
           <Label>비밀번호</Label>
           <Input
