@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import Layout from '@/app/_components/layout';
-import useMutation from '@/lib/client/use-mutation';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
+import Layout from "@/app/_components/layout";
+import useMutation from "@/lib/client/use-mutation";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
-interface LoginForm {
+interface SignInForm {
   email: string;
   password: string;
 }
 
-interface LoginPostResponse {
+interface SignInPostResponse {
   ok: boolean;
 }
 
-export default function Login() {
+export default function SignIn() {
   const router = useRouter();
 
   // onChange 모드 → 입력 즉시 에러 표기
@@ -24,10 +24,23 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>({ mode: 'onChange' });
+  } = useForm<SignInForm>({ mode: "onChange" });
 
-  const onValid = async (data: LoginForm) => {
-    console.log("제출됨")
+  const [postSignIn, { loading, data, error }] =
+    useMutation<SignInPostResponse>("/api/user/sign-in");
+
+  const onValid = async (formData: SignInForm) => {
+    if (loading) return;
+    try {
+      await postSignIn(formData);
+      if (data?.ok) {
+        router.push("/");
+      }
+    } catch (e) {
+      // Handle network or other unexpected errors
+      console.error("Sign-in failed:", e);
+      alert("로그인 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -38,11 +51,11 @@ export default function Login() {
 
           <Label>이메일 주소</Label>
           <Input
-            {...register('email', {
-              required: '이메일은 필수입니다.',
+            {...register("email", {
+              required: "이메일은 필수입니다.",
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: '올바른 이메일 형식이 아닙니다.',
+                message: "올바른 이메일 형식이 아닙니다.",
               },
             })}
             type="email"
@@ -52,11 +65,11 @@ export default function Login() {
 
           <Label>비밀번호</Label>
           <Input
-            {...register('password', {
-              required: '비밀번호는 필수입니다.',
+            {...register("password", {
+              required: "비밀번호는 필수입니다.",
               minLength: {
                 value: 6,
-                message: '비밀번호는 최소 6자 이상이어야 합니다.',
+                message: "비밀번호는 최소 6자 이상이어야 합니다.",
               },
             })}
             type="password"
@@ -71,8 +84,8 @@ export default function Login() {
             <Link href="/forgot-password">비밀번호 찾기</Link>
           </ExtraRow>
 
-          <SubmitButton type="submit" disabled={false}>
-            {'로그인'}
+          <SubmitButton type="submit" disabled={loading}>
+            {loading ? "로그인 중..." : "로그인"}
           </SubmitButton>
         </FormBox>
       </FormContainer>
@@ -141,7 +154,7 @@ const ExtraRow = styled.div`
   }
 `;
 
-const SubmitButton = styled.button<{ disabled?: boolean }>`
+const SubmitButton = styled.button`
   width: 100%;
   background-color: #e49a18;
   color: white;
@@ -150,10 +163,15 @@ const SubmitButton = styled.button<{ disabled?: boolean }>`
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+  margin-top: 20px;
 
   &:hover {
     background-color: #cf8a10;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
 `;
 
